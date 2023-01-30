@@ -12,9 +12,9 @@ function Home() {
         gap: 5,
       }}
     >
-      <button size="large" variant="contained">
+      <Button size="large" variant="contained">
         Hej spotify
-      </button>
+      </Button>
     </Box>
   );
 }
