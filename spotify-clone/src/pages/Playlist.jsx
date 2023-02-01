@@ -1,10 +1,26 @@
-import React from "react";
-import { Avatar, Box, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Avatar, Typography } from "@mui/material";
 import SongTable from "../components/SongTable";
+import { useParams } from "react-router-dom";
 
-function Playlist() {
+export default function Playlist({ spotifyApi }) {
+  const { id } = useParams();
+  const [playlist, setPlaylist] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function getPlaylist() {
+      setIsLoading(true);
+      const playlistInfo = await spotifyApi.getPlaylist(id);
+      console.log(playlistInfo);
+      setPlaylist(playlistInfo.body);
+      setIsLoading(false);
+    }
+    getPlaylist();
+  }, [id]);
+
   return (
-    <Box sx={{ bgcolor: "Background.paper", flex: 1, overflowY: "auto" }}>
+    <Box sx={{ bgcolor: "background.paper", flex: 1, overflowY: "auto" }}>
       <Box
         p={{ xs: 3, md: 4 }}
         sx={{
@@ -19,7 +35,7 @@ function Playlist() {
       >
         <Avatar
           variant="square"
-          src="https://upload.wikimedia.org/wikipedia/en/b/b9/Myworld2.jpg"
+          src={playlist?.images[0]?.url}
           sx={{
             boxShadow: 15,
             width: { sx: "100%", md: 235 },
@@ -29,7 +45,7 @@ function Playlist() {
         <Box>
           <Typography
             sx={{
-              fontSize: 14,
+              fontSize: 18,
               fontWeight: "bold",
               color: "text.primary",
             }}
@@ -43,14 +59,12 @@ function Playlist() {
               color: "text.primary",
             }}
           >
-            My world 2.0
+            {playlist?.name}
           </Typography>
         </Box>
       </Box>
 
-      <SongTable />
+      <SongTable songs={playlist?.tracks.items} isLoading={isLoading} />
     </Box>
   );
 }
-
-export default Playlist;
