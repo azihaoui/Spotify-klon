@@ -3,8 +3,9 @@ import { Box, Grid, Avatar, Typography } from "@mui/material";
 import PlayerController from "./PlayerController";
 import PlayerVolume from "./PlayerVolume";
 import { getAccessTokenFromStorage } from "../utils/getAccessTokenFromStorage";
+import PlayerOverlay from "./PlayerOverlay";
 
-function Player({ spotifyApi }) {
+export default function Player({ spotifyApi }) {
   const [localPlayer, setPlayer] = useState(null);
   const [is_paused, setPaused] = useState(false);
   const [current_track, setTrack] = useState(null);
@@ -40,7 +41,7 @@ function Player({ spotifyApi }) {
           return;
         }
         console.log(state);
-        const duration_ms = state.track_window.current_track.duration_ms / 1000;
+        const duration_ms = state.track_window.current_track.duration_ms;
         const position_ms = state.position;
         setDuration(duration_ms);
         setProgress(position_ms);
@@ -81,14 +82,15 @@ function Player({ spotifyApi }) {
       <Grid
         container
         px={3}
+        onClick={() => setPlayerOverlayIsOpen((c) => !c)}
         sx={{
-          height: "100%",
+          height: 100,
           width: "100%",
           borderTop: "1px solid #292929",
           bgcolor: "background.paper",
         }}
       >
-        <Grid item xs={3} sx={{ display: "flex", alignItems: "center" }}>
+        <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
           <Avatar
             src={current_track.album.images[0]?.url}
             variant="square"
@@ -106,7 +108,7 @@ function Player({ spotifyApi }) {
         <Grid
           item
           sx={{
-            display: "flex",
+            display: { xs: "none", md: "flex" },
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
@@ -119,10 +121,17 @@ function Player({ spotifyApi }) {
             player={localPlayer}
           />
         </Grid>
-        <PlayerVolume />
+        <PlayerVolume player={localPlayer} />
       </Grid>
+      <PlayerOverlay
+        playerOverlayIsOpen={playerOverlayIsOpen}
+        closeOverlay={() => setPlayerOverlayIsOpen(false)}
+        song={current_track}
+        is_paused={is_paused}
+        progress={progress}
+        duration={duration}
+        player={localPlayer}
+      />
     </Box>
   );
 }
-
-export default Player;
