@@ -15,7 +15,7 @@ function MobileNav() {
           onClick={() => navigate("/")}
         />
         <BottomNavigationAction
-          label="Ditt bibliotek"
+          label="Ditt biliotek"
           icon={<List />}
           onClick={() => navigate("/library")}
         />

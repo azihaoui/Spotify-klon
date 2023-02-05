@@ -1,16 +1,9 @@
 import React from "react";
 import { KeyboardArrowDown } from "@mui/icons-material";
 import PlayerController from "./PlayerController";
-import {
-  Box,
-  Container,
-  Grid,
-  IconButton,
-  Avatar,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Grid, IconButton, Typography } from "@mui/material";
 
-function PlayerOverlay({
+const PlayerOverlay = ({
   playerOverlayIsOpen,
   closeOverlay,
   song,
@@ -18,7 +11,7 @@ function PlayerOverlay({
   is_paused,
   duration,
   player,
-}) {
+}) => {
   return (
     <Box
       sx={{
@@ -100,6 +93,6 @@ function PlayerOverlay({
       </Container>
     </Box>
   );
-}
+};
 
 export default PlayerOverlay;
